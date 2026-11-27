@@ -6,6 +6,7 @@ const Student = require("./models/Student");
  
 // CRUD IMPORTS (added in Steps 6-9)
 const create = require("./crud/create");
+const read = require("./crud/read");
  
 const app = express();
 app.use(express.json());
@@ -13,7 +14,7 @@ app.use(express.json());
 connectDB(); // connect to MongoDB Atlas when the server starts
  
 // Helper: runs a function, then sends its result (or its error) back as JSON
-function demo(handler) {
+function demoHandler(handler) {
   return async (req, res) => {
     try {
       const result = await handler(req);
@@ -30,19 +31,25 @@ app.get("/", (req, res) => {
 });
  
 // Utility: empties the students collection (demo database only!)
-app.get("/demo/reset", demo(async () => {
+app.get("/demo/reset", demoHandler(async () => {
   const result = await Student.deleteMany({});
   return { deletedCount: result.deletedCount };
 }));
  
 // CREATE ROUTES (Step 6)
-app.get("/demo/create/save", demo(() => create.createWithSave()));
-app.get("/demo/create/shorthand", demo(() => create.createWithCreate()));
-app.get("/demo/create/many", demo(() => create.createMany()));
-app.get("/demo/create/invalid", demo(() => create.createInvalid()));
+app.get("/demo/create/save", demoHandler(() => create.createWithSave()));
+app.get("/demo/create/shorthand", demoHandler(() => create.createWithCreate()));
+app.get("/demo/create/many", demoHandler(() => create.createMany()));
+app.get("/demo/create/invalid", demoHandler(() => create.createInvalid()));
 
  
 // READ ROUTES (Step 7)
+app.get("/demo/read/all", demoHandler(() => read.readAll()));
+app.get("/demo/read/passed", demoHandler(() => read.readPassed()));
+app.get("/demo/read/top", demoHandler(() => read.readTopStudents()));
+app.get("/demo/read/by-id/:id", demoHandler((req) => read.readById(req.params.id)));
+app.get("/demo/read/by-email/:email", demoHandler((req) => read.readByEmail(req.params.email)));
+
  
 // UPDATE ROUTES (Step 8)
  
