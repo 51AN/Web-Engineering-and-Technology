@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 const Student = require("./models/Student");
  
 // CRUD IMPORTS (added in Steps 6-9)
+const create = require("./crud/create");
  
 const app = express();
 app.use(express.json());
@@ -35,6 +36,11 @@ app.get("/demo/reset", demo(async () => {
 }));
  
 // CREATE ROUTES (Step 6)
+app.get("/demo/create/save", demo(() => create.createWithSave()));
+app.get("/demo/create/shorthand", demo(() => create.createWithCreate()));
+app.get("/demo/create/many", demo(() => create.createMany()));
+app.get("/demo/create/invalid", demo(() => create.createInvalid()));
+
  
 // READ ROUTES (Step 7)
  
